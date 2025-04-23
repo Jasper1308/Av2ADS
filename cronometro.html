@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+        }
+        div{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="cronometro">
+        <p id="contador"></p>
+        <div>
+            <button>ZERAR</button>
+            <button>PARAR</button>            
+        </div>
+    </div>
+    <div id="paradas">
+        <ul>
+            <li>Parada 1:</li>
+        </ul>
+    </div>
+    <script>
+        function atualizaHora(){
+            let data = new Date();
+            let hora = data.getHours();
+            let minutos = data.getMinutes();
+            let segundos = data.getSeconds();
+            document.getElementById("contador").innerHTML = hora + ":" + minutos + ":" + segundos;
+        }
+
+        setInterval(atualizaHora, 1000);
+    </script>
+</body>
+</html>
