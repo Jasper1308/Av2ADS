@@ -49,7 +49,6 @@
             margin-left: 10%;
             margin-top: 25px;
             display: flex;
-            justify-content: center;
             align-items: center;
             flex-direction: column;
             border-radius: 15px;
@@ -64,8 +63,7 @@
                 <p id="contador">00:00:00</p>
             </div>
             <div class="botoes">
-                <button class="btn btn-primary" onclick="iniciarContador()">INICIAR</button>
-                <button class="btn btn-primary">ZERAR</button>
+                <button class="btn btn-primary" id="iniciar" onclick="iniciarContador()">INICIAR</button>
                 <button class="btn btn-primary" onclick="pararContador()">PARAR</button>            
             </div>
         </div>
@@ -78,21 +76,25 @@
     </div>
     <script>
         function iniciarContador(){
-            date = new Date();
-            start = date.getTime();
-            setInterval(function(){
-                milisegundos = new Date().getTime() - start;
-                segundos = Math.floor((milisegundos % (1000 * 60)) / 1000);
-                minutos = Math.floor((milisegundos % (1000 * 60 * 60)) / (1000 * 60));
-                horas = Math.floor((milisegundos % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                if (segundos < 10) { segundos = "0" + segundos; }
-                if (minutos < 10) { minutos = "0" + minutos; }
-                if (horas < 10) { horas = "0" + horas; }
-                document.getElementById("contador").innerHTML = horas + ":" + minutos + ":" + segundos;
-            })
-        }
-        function pararContador(){
+            if(!rodando) {
+                rodando = true;
+                start = new Date().getTime() - milisegundos;
+                intervalo = setInterval(atualizarTempo, 1000);
+            } else{
+                rodando = false;
+                clearInterval(intervalo);
+            }
             
+        }
+        function atualizarTempo(){
+            milisegundos = new Date().getTime() - start;
+            segundos = Math.floor((milisegundos % (1000 * 60)) / 1000);
+            minutos = Math.floor((milisegundos % (1000 * 60 * 60)) / (1000 * 60));
+            horas = Math.floor((milisegundos % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            if (segundos < 10) { segundos = "0" + segundos; }
+            if (minutos < 10) { minutos = "0" + minutos; }
+            if (horas < 10) { horas = "0" + horas; }
+            document.getElementById("contador").innerHTML = horas + ":" + minutos + ":" + segundos;
         }
     </script>
 </body>

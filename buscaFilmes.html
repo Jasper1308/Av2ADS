@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+        }
+
+        header{
+            display: flex;
+            justify-content: center;
+            background-color: #646464;
+            height: 5vh;
+            padding: 10px 0px 10px 0px;
+        }
+
+        #filmes{
+            display: grid;
+            grid-template-areas:
+                "img img img img"
+                "h2 h2 h2 h2";
+        }
+
+        #filmesContainer{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #556470;
+            border: 1px solid black;
+        }
+        #busca{
+            width: 300px;
+            height: 30px;
+            border-radius: 5px;
+            border: none;
+            padding-left: 10px;
+        }
+
+        img{
+            width: 200px;
+            height: 300px;
+            margin: 10px;
+        }
+        h2{
+            text-align: center;
+            color: wheat;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <input type="text" id="busca" placeholder="Digite o nome do filme">
+        <button onclick="buscarFilme()">BUSCAR</button>
+    </header>
+    <div id="filmes">
+
+    </div>
+    <script>
+        let apiKey = "2ea887ebff11e634778d68b8e4ce71b7";
+        let url = "https://api.themoviedb.org/3/search/movie?api_key=" + apiKey + "&query=";
+
+        async function buscarFilme(){
+            try{
+                const response = await fetch(url + busca.value);
+                const data = await response.json();
+                const filmes = data.results;
+                console.log(filmes);
+                const listaFilmes = document.getElementById("filmes");
+                listaFilmes.innerHTML = "";
+                
+                filmes.forEach(filme => {
+                    const linkPoster = "https://image.tmdb.org/t/p/w500" + filme.poster_path;
+                    const divFilmes = document.createElement("div");
+                    divFilmes.id = "filmesContainer";
+                    const img = document.createElement("img");
+                    const h2 = document.createElement("h2");
+                    img.src = linkPoster;
+                    h2.innerText = filme.title;
+                    divFilmes.appendChild(img);
+                    divFilmes.appendChild(h2);
+                    listaFilmes.appendChild(divFilmes);
+                }); 
+                
+            }catch(error){
+                console.error("Erro ao buscar o filme:", error);
+            }
+        }
+    </script>
+</body>
+</html>
