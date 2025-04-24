@@ -7,39 +7,47 @@
     <title>Document</title>
     <style>
         body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
             margin: 0;
             padding: 0;
         }
 
         .btn{
-            width: 100px;
-            height: 75px;
-            margin: 7px;
+            width: 150px;
+            height: 120px;;
             border-radius: 2px;
+            margin: 7px;
         }
 
         #view{
             border: 1px solid black;
-            grid-column: 1 / 6;
+            
         }
 
         #calculadora{
             display: grid;
-            grid-template-areas: none
-            ;
+            grid-template-areas:
+                "soma subt multi divid"
+                "7 8 9 igual"
+                "4 5 6 igual"
+                "1 2 3 igual"
+                "0 . C igual";
         }
 
-        #igual{
-            grid-column: 2 / 6;
-            grid-row: 4 / 5;
+        #igual {
+            grid-area: igual;
+            height: 98%;
         }
+
     </style>
 </head>
 <body>
+    <div id="view">
+        <h1 id="num"></h1>
+    </div>
     <div id="calculadora">
-        <div id="view">
-            <h1 id="num"></h1>
-        </div>
         <button class="btn btn-secondary">+</button>
         <button class="btn btn-secondary">-</button>
         <button class="btn btn-secondary">x</button>
