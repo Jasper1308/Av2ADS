@@ -61,31 +61,39 @@
     <div class="cronometro-container">
         <div class="cronometro-display">
             <div class="cronometro">
-                <p id="contador"></p>
+                <p id="contador">00:00:00</p>
             </div>
             <div class="botoes">
-                <button class="btn btn-primary">INICIAR</button>
+                <button class="btn btn-primary" onclick="iniciarContador()">INICIAR</button>
                 <button class="btn btn-primary">ZERAR</button>
-                <button class="btn btn-primary">PARAR</button>            
+                <button class="btn btn-primary" onclick="pararContador()">PARAR</button>            
             </div>
         </div>
         <div id="paradas">
             <h1>PARADAS</h1>
-            <ul>
+            <ul id="lista-paradas">
                 <li>Parada 1:</li>
             </ul>
         </div>
     </div>
     <script>
-        function atualizaHora(){
-            let data = new Date();
-            let hora = data.getHours();
-            let minutos = data.getMinutes();
-            let segundos = data.getSeconds();
-            document.getElementById("contador").innerHTML = hora + ":" + minutos + ":" + segundos;
+        function iniciarContador(){
+            date = new Date();
+            start = date.getTime();
+            setInterval(function(){
+                milisegundos = new Date().getTime() - start;
+                segundos = Math.floor((milisegundos % (1000 * 60)) / 1000);
+                minutos = Math.floor((milisegundos % (1000 * 60 * 60)) / (1000 * 60));
+                horas = Math.floor((milisegundos % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                if (segundos < 10) { segundos = "0" + segundos; }
+                if (minutos < 10) { minutos = "0" + minutos; }
+                if (horas < 10) { horas = "0" + horas; }
+                document.getElementById("contador").innerHTML = horas + ":" + minutos + ":" + segundos;
+            })
         }
-
-        setInterval(atualizaHora, 1000);
+        function pararContador(){
+            
+        }
     </script>
 </body>
 </html>
