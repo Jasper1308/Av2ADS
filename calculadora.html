@@ -22,6 +22,15 @@
             margin: 7px;
         }
 
+        #calculadora{
+            border: 3px solid black;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            margin: 20px 20px 20px 20px;
+        }
+
         #view{
             margin-top: 15px;
             border: 1px solid black;
@@ -30,7 +39,7 @@
             justify-content: end;
         }
 
-        #calculadora{
+        #botoes{
             display: grid;
             grid-template-areas:
                 "soma subt multi divid"
@@ -48,30 +57,38 @@
     </style>
 </head>
 <body>
-    <div id="view">
-        <h1 id="num">0</h1>
-    </div>
     <div id="calculadora">
-        <button class="btn btn-secondary">+</button>
-        <button class="btn btn-secondary">-</button>
-        <button class="btn btn-secondary">x</button>
-        <button class="btn btn-secondary">/</button>
-        <button class="btn btn-light">7</button>
-        <button class="btn btn-light">8</button>
-        <button class="btn btn-light">9</button>
-        <button class="btn btn-light">4</button>
-        <button class="btn btn-light">5</button>
-        <button class="btn btn-light">6</button>
-        <button class="btn btn-light">1</button>
-        <button class="btn btn-light">2</button>
-        <button class="btn btn-light">3</button>
-        <button class="btn btn-light">0</button>
-        <button class="btn btn-light">.</button>
-        <button class="btn btn-light">C</button>
-        <button id="igual" class="btn btn-primary">=</button>
+        <div id="view">
+            <h1 id="display"></h1>
+        </div>
+        <div id="botoes">
+            <button class="btn btn-secondary" onclick="adicionaDisplay('+')">+</button>
+            <button class="btn btn-secondary" onclick="adicionaDisplay('-')">-</button>
+            <button class="btn btn-secondary" onclick="adicionaDisplay('*')">x</button>
+            <button class="btn btn-secondary" onclick="adicionaDisplay('/')">/</button>
+
+            <button class="btn btn-light" onclick="adicionaDisplay('7')">7</button>
+            <button class="btn btn-light" onclick="adicionaDisplay('8')">8</button>
+            <button class="btn btn-light" onclick="adicionaDisplay('9')">9</button>
+
+            <button class="btn btn-light" onclick="adicionaDisplay('4')">4</button>
+            <button class="btn btn-light" onclick="adicionaDisplay('5')">5</button>
+            <button class="btn btn-light" onclick="adicionaDisplay('6')">6</button>
+
+            <button class="btn btn-light" onclick="adicionaDisplay('1')">1</button>
+            <button class="btn btn-light" onclick="adicionaDisplay('2')">2</button>
+            <button class="btn btn-light" onclick="adicionaDisplay('3')">3</button>
+
+            <button class="btn btn-light" onclick="adicionaDisplay('0')">0</button>
+            <button class="btn btn-light" onclick="adicionaDisplay('.')">.</button>
+            <button class="btn btn-light">C</button>
+            <button id="igual" class="btn btn-primary">=</button>
+        </div>
     </div>
     <script>
-        
+        function adicionaDisplay(value){
+            display.textContent += value;
+        }
     </script>
 </body>
 </html>
