@@ -56,6 +56,7 @@
 
     </style>
 </head>
+
 <body>
     <div class="cronometro-container">
         <div class="cronometro-display">
@@ -64,38 +65,72 @@
             </div>
             <div class="botoes">
                 <button class="btn btn-primary" id="iniciar" onclick="atualizarTempo()">INICIAR</button>
-                <button class="btn btn-primary" onclick="pararContador()">PARAR</button>            
+                <button class="btn btn-primary" onclick="pararContador()">PARAR</button>
+                <button class="btn btn-primary" id="zerar" onclick="zerarTempo()">ZERAR</button>
             </div>
         </div>
         <div id="paradas">
             <h1>PARADAS</h1>
             <ul id="lista-paradas">
-                <li>Parada 1:</li>
             </ul>
         </div>
     </div>
+
     <script>
-        function iniciarContador(){
-            if(!rodando) {
-                rodando = true;
-                start = new Date().getTime() - milisegundos;
-                intervalo = setInterval(atualizarTempo, 1000);
-            } else{
-                rodando = false;
-                clearInterval(intervalo);
+        let inicio = null;
+        let intervalo = null;
+        let tempoPausado = 0;
+        let contadorParadas = 1;
+
+        function atualizarTempo() {
+            if (intervalo) return;
+
+            if (!inicio) {
+                inicio = new Date().getTime() - tempoPausado;
             }
-            
-        }
-        function atualizarTempo(){
-            milisegundos = new Date().getTime() - start;
-            segundos = Math.floor((milisegundos % (1000 * 60)) / 1000);
-            minutos = Math.floor((milisegundos % (1000 * 60 * 60)) / (1000 * 60));
-            horas = Math.floor((milisegundos % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            if (segundos < 10) { segundos = "0" + segundos; }
-            if (minutos < 10) { minutos = "0" + minutos; }
-            if (horas < 10) { horas = "0" + horas; }
-            document.getElementById("contador").innerHTML = horas + ":" + minutos + ":" + segundos;
-        }
+
+            intervalo = setInterval(() => {
+                const agora = new Date().getTime();
+                const tempoDecorrido = agora - inicio;
+
+                const horas = Math.floor(tempoDecorrido / 3600000);
+                const minutos = Math.floor((tempoDecorrido % 3600000) / 60000);
+                const segundos = Math.floor((tempoDecorrido % 60000) / 1000);
+
+                document.getElementById("contador").textContent =
+                    `${formatarTempo(horas)}:${formatarTempo(minutos)}:${formatarTempo(segundos)}`;
+            }, 1000);
+            }
+
+            function pararContador() {
+                if (!intervalo) return;
+
+                clearInterval(intervalo);
+                intervalo = null;
+
+                const agora = new Date().getTime();
+                tempoPausado = agora - inicio;
+
+                const tempoAtual = document.getElementById("contador").textContent;
+                const li = document.createElement("li");
+                li.textContent = `Parada ${contadorParadas++}: ${tempoAtual}`;
+                document.getElementById("lista-paradas").appendChild(li);
+            }
+
+            function zerarTempo() {
+                clearInterval(intervalo);
+                intervalo = null;
+                inicio = null;
+                tempoPausado = 0;
+                contadorParadas = 1;
+
+                document.getElementById("contador").textContent = "00:00:00";
+                document.getElementById("lista-paradas").innerHTML = "";
+            }
+
+            function formatarTempo(valor) {
+                return valor < 10 ? `0${valor}` : valor;
+            }
     </script>
 </body>
 </html>
