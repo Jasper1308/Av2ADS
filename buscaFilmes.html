@@ -3,17 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
     <title>Document</title>
     <style>
         body{
             margin: 0;
             padding: 0;
+            background-color: #212a37;
         }
 
         header{
             display: flex;
             justify-content: center;
-            background-color: #646464;
+            background-color: #212a37;
             height: 5vh;
             padding: 10px 0px 10px 0px;
         }
@@ -30,8 +32,10 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background-color: #556470;
+            background-color: #7e84a8;
             border: 1px solid black;
+            border-radius: 5px;
+            margin: 25px 25px 25px 25px;
         }
         #busca{
             width: 300px;
@@ -48,14 +52,19 @@
         }
         h2{
             text-align: center;
-            color: wheat;
+            color: white;
+        }
+
+        button{
+            height: 30px;
+            margin-left: 10px;
         }
     </style>
 </head>
 <body>
     <header>
         <input type="text" id="busca" placeholder="Digite o nome do filme">
-        <button onclick="buscarFilme()">BUSCAR</button>
+        <button onclick="buscarFilme()" class="btn btn-primary">BUSCAR</button>
     </header>
     <div id="filmes">
 
@@ -66,25 +75,36 @@
 
         async function buscarFilme(){
             try{
+                // Faz uma requisição para a API com valor da busca
                 const response = await fetch(url + busca.value);
                 const data = await response.json();
                 const filmes = data.results;
                 console.log(filmes);
                 const listaFilmes = document.getElementById("filmes");
                 listaFilmes.innerHTML = "";
-                
+
+                // Percorre cada objeto da lista de filmes e cria elementos html
                 filmes.forEach(filme => {
+                    // Link completo imagem
                     const linkPoster = "https://image.tmdb.org/t/p/w500" + filme.poster_path;
+                    // Criando div para cada filme
                     const divFilmes = document.createElement("div");
+                    // Adicionando id a div
                     divFilmes.id = "filmesContainer";
+
+                    // Criando elementos necessários para preencher a div
                     const img = document.createElement("img");
                     const h2 = document.createElement("h2");
-                        
+
+                    
+                    // Adicionando os atributos aos elementos criados
                     img.src = linkPoster;
                     h2.innerText = filme.title;
 
+                    // Adicionando elementos criados na div
                     divFilmes.appendChild(img);
                     divFilmes.appendChild(h2);
+                    // Adicionando a div na lista de filmes
                     listaFilmes.appendChild(divFilmes);
                 }); 
                 
