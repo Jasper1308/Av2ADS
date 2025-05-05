@@ -64,9 +64,9 @@
                 <p id="contador">00:00:00</p>
             </div>
             <div class="botoes">
-                <button class="btn btn-primary" id="iniciar" onclick="atualizarTempo()">INICIAR</button>
-                <button class="btn btn-primary" onclick="pararContador()">PARAR</button>
-                <button class="btn btn-primary" id="zerar" onclick="zerarTempo()">ZERAR</button>
+                <button class="btn btn-primary" id="iniciar" onclick="start()">INICIAR</button>
+                <button class="btn btn-primary" onclick="stop()">PARAR</button>
+                <button class="btn btn-primary" id="zerar" onclick="zero()">ZERAR</button>
             </div>
         </div>
         <div id="paradas">
@@ -77,60 +77,64 @@
     </div>
 
     <script>
-        let inicio = null;
-        let intervalo = null;
-        let tempoPausado = 0;
-        let contadorParadas = 1;
+        // definindo variaveis para tempo inicial, tempo percorrido e pausa
+        let startTime = 0;
+        let elapsedTime = 0;
+        let pause = true;
 
-        function atualizarTempo() {
-            if (intervalo) return;
-
-            if (!inicio) {
-                inicio = new Date().getTime() - tempoPausado;
+        // função para iniciar cronometro, tempo inicial definido no momento da chamada caso o tempo decorrido seja 0
+        // Uso do setInterval para atualizar display a cada 10ms com id para limpar intervalo depois 
+        function start(){
+            if(pause){
+                if(elapsedTime == 0){
+                    startTime = Date.now(); // tempo inicial definido no momento da chamada
+                }else{
+                    startTime = Date.now() - elapsedTime; // tempo inicial definido com o tempo decorrido
+                }
+                intervalId = setInterval(updateDisplay, 100); // id do intervalo que atualiza display a cada 100ms
+                pause = false; // definindo que não esta mais pausado
             }
+        }
+        
+        // função de pausa, que limpa intervalo para pausar a atualização de display
+        // cria elemento li para adicionar a lista de paradas com o tempo decorrido formatado
+        function stop(){
+                pause = true;
+                elapsedTime = Date.now() - startTime; // tempo decorrido definido com o tempo atual menos o tempo inicial
+                clearInterval(intervalId); // limpando intervalo para parar atualização de display
+                let itemList = document.createElement("li"); // criando variavel para criar elemento li
+                itemList.textContent = format(elapsedTime); // definindo o texto do elemento li com o tempo decorrido formatado
+                document.getElementById("lista-paradas").appendChild(itemList); // adicionando elemento li a lista de paradas
+        }
 
-            intervalo = setInterval(() => {
-                const agora = new Date().getTime();
-                const tempoDecorrido = agora - inicio;
+        // funcção para zerar contador e limpar lista de paradas
+        function zero(){
+            elapsedTime = 0;
+            startTime = Date.now();
+            document.getElementById("contador").innerHTML = format(elapsedTime);
+            document.getElementById("lista-paradas").innerHTML = "";
+            clearInterval(intervalId);
+        }
 
-                const horas = Math.floor(tempoDecorrido / 3600000);
-                const minutos = Math.floor((tempoDecorrido % 3600000) / 60000);
-                const segundos = Math.floor((tempoDecorrido % 60000) / 1000);
+        // funcao auxiliar para formatar tempo de milissegundos para horas, minutos e segundos
+        function format(ms){
+            let totalSeconds = Math.floor(ms / 1000); // convertendo milissegundos para segundos e arredondando para baixo
+            let seconds = totalSeconds % 60;
+            let minutes = Math.floor(totalSeconds / 60) % 60;
+            let hours = Math.floor(totalSeconds / 3600);
+            return formatUn(hours) + ":" + formatUn(minutes) + ":" + formatUn(seconds); // retornando o tempo formatado com horas, minutos e segundos
+        }
 
-                document.getElementById("contador").textContent =
-                    `${formatarTempo(horas)}:${formatarTempo(minutos)}:${formatarTempo(segundos)}`;
-            }, 1000);
-            }
+        // funcao auxiliar para formatar tempo caso seja um valor menor que 10
+        function formatUn(num){
+            return num < 10 ? "0" + num : num;
+        }
 
-            function pararContador() {
-                if (!intervalo) return;
-
-                clearInterval(intervalo);
-                intervalo = null;
-
-                const agora = new Date().getTime();
-                tempoPausado = agora - inicio;
-
-                const tempoAtual = document.getElementById("contador").textContent;
-                const li = document.createElement("li");
-                li.textContent = `Parada ${contadorParadas++}: ${tempoAtual}`;
-                document.getElementById("lista-paradas").appendChild(li);
-            }
-
-            function zerarTempo() {
-                clearInterval(intervalo);
-                intervalo = null;
-                inicio = null;
-                tempoPausado = 0;
-                contadorParadas = 1;
-
-                document.getElementById("contador").textContent = "00:00:00";
-                document.getElementById("lista-paradas").innerHTML = "";
-            }
-
-            function formatarTempo(valor) {
-                return valor < 10 ? `0${valor}` : valor;
-            }
+        // funcao para atualizar display com o tempo decorrido formatado
+        function updateDisplay(){
+            elapsedTime = Date.now() - startTime;
+            document.getElementById("contador").innerHTML = format(elapsedTime);
+        }
     </script>
 </body>
 </html>
