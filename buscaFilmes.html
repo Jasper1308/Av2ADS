@@ -9,7 +9,8 @@
         body{
             margin: 0;
             padding: 0;
-            background-color: #212a37;
+            background-color: #1e2937;
+            font-family: ;
         }
 
         header{
@@ -32,7 +33,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background-color: #7e84a8;
+            background-color: #636972;
             border: 1px solid black;
             border-radius: 5px;
             margin: 25px 25px 25px 25px;
@@ -50,7 +51,7 @@
             height: 300px;
             margin: 10px;
         }
-        h2{
+        h4{
             text-align: center;
             color: white;
         }
@@ -67,7 +68,6 @@
         <button onclick="buscarFilme()" class="btn btn-primary">BUSCAR</button>
     </header>
     <div id="filmes">
-
     </div>
     <script>
         let apiKey = "2ea887ebff11e634778d68b8e4ce71b7";
@@ -77,10 +77,12 @@
             try{
                 // Faz uma requisição para a API com valor da busca
                 const response = await fetch(url + busca.value);
+                // Converte a resposta JSON para objeto
                 const data = await response.json();
                 const filmes = data.results;
                 console.log(filmes);
                 const listaFilmes = document.getElementById("filmes");
+                // Limpa a lista de filmes antes de adicionar novos filmes
                 listaFilmes.innerHTML = "";
 
                 // Percorre cada objeto da lista de filmes e cria elementos html
@@ -94,16 +96,23 @@
 
                     // Criando elementos necessários para preencher a div
                     const img = document.createElement("img");
-                    const h2 = document.createElement("h2");
+                    const titulo = document.createElement("h4");
+                    const ano = document.createElement("p");
+                    const nota = document.createElement("p");
 
                     
                     // Adicionando os atributos aos elementos criados
                     img.src = linkPoster;
-                    h2.innerText = filme.title;
+                    titulo.innerText = filme.title;
+                    ano.innerText = "Ano: " + filme.release_date.split("-")[0]; // Pega o ano da data de lançamento
+                    nota.innerText = "Nota: " + filme.vote_average.toFixed(1) + "/10";
+                    
 
                     // Adicionando elementos criados na div
                     divFilmes.appendChild(img);
-                    divFilmes.appendChild(h2);
+                    divFilmes.appendChild(titulo);
+                    divFilmes.appendChild(ano);
+                    divFilmes.appendChild(nota);
                     // Adicionando a div na lista de filmes
                     listaFilmes.appendChild(divFilmes);
                 }); 
