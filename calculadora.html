@@ -89,16 +89,18 @@
         </div>
     </div>
     <script>
+        // função para adicionar valor ao display
         function adicionaDisplay(value){
-            display.textContent += value;
+            display.textContent += value; // adiciona ao elemento com id display o valor de parametro
         }
 
         function calcular(){
-            conta = display.textContent
-            resultado = eval(conta);
-            display.textContent = resultado
+            conta = display.textContent // pegao valor do display
+            resultado = eval(conta); // usa eval para calcular o resultado da conta(aqui está o segredo)
+            display.textContent = resultado // adiciona o resultado ao display
         }
 
+        // função para limpar o display
         function limparDisplay(){
             display.textContent = ''
         }
